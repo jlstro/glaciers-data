@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <h1 class="display-4">{{ glacier.FEATURE_NAME }}</h1>
+  <p class="lead">Glaciers are freaking cool (no pun intended).</p>
+</div>
+
+
+<div class="row mb-5">
+  <div class="col-5">
+    <h3>Glacier Info</h3>
+    <p>Mountain Ridge: {{ glacier.MAP_NAME}}</p>
+    <p>County: {{ glacier.COUNTY_NAME }}</p>
+    <p>State: {{ glacier.STATE_ALPHA }}</p>
+    <p>Elevation: {{ glacier.ELEV_IN_M }} meter</p>
+    <p><a target="_blank" href="https://duckduckgo.com/?q={{glacier.FEATURE_NAME}}&atb=v117-7__&iax=images&ia=images" class="btn btn-info">Click here to see an image of {{ glacier.FEATURE_NAME }}</a></p>
+  </div>
+  <div class="col-7">
+
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+   crossorigin=""/>
+ <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+   integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+   crossorigin=""></script>
+ <div id="mapid"></div>
+  <style>
+  #mapid { height: 400px; }
+  </style>
+<script>
+  var map = L.map('mapid').setView([{{ glacier.PRIM_LAT_DEC }}, {{ glacier.PRIM_LONG_DEC}}], 5);
+
+
+L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+}).addTo(map)
+
+var marker = L.marker([{{ glacier.PRIM_LAT_DEC }}, {{ glacier.PRIM_LONG_DEC }}]).addTo(map);
+marker.bindPopup("{{ glacier.FEATURE_NAME }}").openPopup();
+</script>
+    </div>
+</div>
+
+{% endblock %}
